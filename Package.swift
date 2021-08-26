@@ -5,11 +5,19 @@ import PackageDescription
 
 let package = Package(
     name: "Fraction",
+    platforms: [
+        .iOS(.v11),
+        .macOS(.v10_14)
+    ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "Fraction",
             targets: ["Fraction"]),
+        .executable(
+            name: "FractionCLI",
+            targets: ["FractionCLI"]
+        )
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,6 +29,9 @@ let package = Package(
         .target(
             name: "Fraction",
             dependencies: []),
+        .target(
+            name: "FractionCLI",
+            dependencies: ["Fraction"]),
         .testTarget(
             name: "FractionTests",
             dependencies: ["Fraction"]),
