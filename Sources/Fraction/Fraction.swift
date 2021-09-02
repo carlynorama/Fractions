@@ -128,5 +128,16 @@ extension Fraction {
         }
     }
     
+    private func shiftReducer(_ m:Int, _ n:Int) -> (Int, Int) {
+        if m == n {
+            return (1, 1)
+        }
+        
+        if (m & 1) == 0 && (n & 1) == 0 {
+            return shiftReducer(m >> 1, n >> 1) //<< 1
+        }
+        
+        return (m,n)
+    }
 }
 
