@@ -255,13 +255,6 @@ extension Fraction {
         case up
         case down
     }
-    
-
-
-    
-    //MARK: - Farey Numbers
-    
-
  
     
 //END EXTENTION
