@@ -11,28 +11,34 @@ import Foundation
 //MARK: -- Working with Doubles
 extension Fraction {
     
+    public init(_ submittedDouble:Double) {
+        let result = Self.findFastApproximation(of: submittedDouble)
+        self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
+    }
+    
     public init(_ submittedDouble:Double, withMaxDenominator maxDenomVal:Int) {
         let result = Self.findFareyApproximation(of: submittedDouble, withMaxDenominator: maxDenomVal)
         self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
     }
     
     public init(_ submittedDouble:Double, snapToCustomaryUnit divisor:CustomaryUnitValue) {
-        let result = Self.snappedToCustomaryUnit(submittedDouble, toNearest: divisor, snapDirection: .up)
+        let result = Self.findClosest(.sixteenths, to: submittedDouble, rounding: .up)
         self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
     }
     
     public init(_ submittedDouble:Double, snapToDivisor divisor:Int) {
-        let result = Self.snapped(submittedDouble, divisor: divisor, snapDirection: .up)
+        let result = Self.findClosestTo(submittedDouble, withDivisor: divisor, rounding: .up)
         self.init(whole: result.whole, numerator: result.numerator, denominator:result.denominator)
     }
     
+//    TODO: A decimal conversion style to simplify inits?
 //    enum DecimalConversionStyle {
 //        //Continuous Fraction
 //        case fastAndHigh
 //        //Farey Number Seeking
 //        case closestLowest
-//        //Use a value closest to an "Imperial" denominator
-//        case snappedToImperial
+//        //Use a value closest to an "US Customary Unit" compatible denominator
+//        case snappedToCustomary
 //    }
     
     public enum CustomaryUnitValue:Double, CaseIterable {
@@ -143,8 +149,15 @@ extension Fraction {
     //MARK: - Approaches to estimating fractions
     
     //MARK: -- Continued fractions
+    static func findFastApproximation(of sumittedValue: Double) -> (whole:Int?, numerator:Int, denominator:Int) {
+        let pair = speedsterApproximation(of: sumittedValue)
+        let result = Self.mixedFormFromSimple(pair.numerator, pair.denominator)
+        let whole = result.whole == 0 ? nil : result.whole
+        return (whole: whole, numerator:result.numerator, denominator: result.denominator)
+    }
+    
+    
     static func speedsterApproximation(of sumittedValue: Double) -> (numerator:Int, denominator:Int) {
-        print("Running A algo")
         var x = sumittedValue.magnitude
         let multiplier = x == sumittedValue ? 1 : -1
         var a = x.rounded(.towardZero)  //this is now
@@ -177,8 +190,9 @@ extension Fraction {
     // https://www.cut-the-knot.org/proofs/fords.shtml#mediant
     
     
-    //Uses Farey numbers, potentially could end up with a lower denom than the speedster
-    //Mostly clean up to handle numbers not in 0...1
+    //Using Farey numbers for Max denom b/c likely thats a situation where the person cares about pretty
+    //looking numbers.
+    
     static func findFareyApproximation(of submittedDouble:Double, withMaxDenominator maxLimit:Int) -> (whole:Int?, numerator:Int, denominator:Int) {
         let neg = submittedDouble < 0
         let split = splitDecimal(submittedDouble)
@@ -281,7 +295,7 @@ extension Fraction {
 
 
     //Should find the lowest... kinda very slow
-    static func snappedToCustomaryUnit(_ submittedValue:Double, toNearest granularity:CustomaryUnitValue = .sixtyfourths, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
+    static func findClosest(_ granularity:CustomaryUnitValue = .sixtyfourths, to submittedValue:Double, rounding snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
   
         let split = splitDecimal(submittedValue)
         
@@ -302,7 +316,7 @@ extension Fraction {
     }
 
     
-    static func snapped(_ submittedValue:Double, divisor:Int, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
+    static func findClosestTo(_ submittedValue:Double, withDivisor divisor:Int, rounding snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
         
         let split = splitDecimal(submittedValue)
         let denominator = divisor

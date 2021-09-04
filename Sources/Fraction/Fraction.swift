@@ -183,7 +183,7 @@ extension Fraction:Comparable, Equatable {
         return (m,n)
     }
     
-    static func mixedFormFromSimple(_ n:Int, _ d:Int) -> (Int, Int, Int) {
+    static func mixedFormFromSimple(_ n:Int, _ d:Int) -> (whole:Int, numerator:Int, denominator:Int) {
         let (quotient, remainder) = n.quotientAndRemainder(dividingBy: d)
         return (quotient, remainder, d)
     }
