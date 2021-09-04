@@ -27,7 +27,7 @@ public struct Fraction {
         }
     }
     
-    public var decimal:Double {
+    public var double:Double {
         Double(whole ?? 0) + (Double(numerator)/Double(denominator))
     }
     
@@ -92,7 +92,20 @@ extension Fraction {
 //MARK: - Static Functions
 
 //MARK: -- Math
-extension Fraction {
+extension Fraction:Comparable, Equatable {
+    
+    
+    // ---------  Fighting Words
+    //(Rational Numbers People will want to have a word)
+    public static func < (lhs: Fraction, rhs: Fraction) -> Bool {
+        lhs.double < rhs.double
+    }
+    
+    public static func ==(lhs: Fraction, rhs: Fraction) ->Bool {
+        lhs.double == rhs.double
+    }
+    // ---------  End Fighting Words
+    
     //Stein Algorithm, Binary Recursion
     static func gcd(_ m:Int, _ n:Int) -> Int {
         //filter easy cases
@@ -145,7 +158,7 @@ extension Fraction {
         return (quotient, remainder, d)
     }
     
-    static func +(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+    public static func +(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
         let (lhs_N, lhs_D) = lhs.unmixedComponents()
         let (rhs_N, rhs_D) = rhs.unmixedComponents()
         
@@ -156,7 +169,7 @@ extension Fraction {
         return Fraction(mixedFormFromSimple((cross_lDrN + cross_rDlN), crossDenominator))
     }
     
-    static func -(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+    public static func -(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
         let (lhs_N, lhs_D) = lhs.unmixedComponents()
         let (rhs_N, rhs_D) = rhs.unmixedComponents()
         
@@ -167,7 +180,7 @@ extension Fraction {
         return Fraction(mixedFormFromSimple((cross_lDrN + cross_rDlN), crossDenominator))
     }
     
-    static func *(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+    public static func *(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
         let (lhs_N, lhs_D) = lhs.unmixedComponents()
         let (rhs_N, rhs_D) = rhs.unmixedComponents()
         
@@ -177,7 +190,7 @@ extension Fraction {
         return Fraction(mixedFormFromSimple(numerator, denominator))
     }
     
-    static func /(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+    public static func /(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
         let (lhs_N, lhs_D) = lhs.unmixedComponents()
         let (rhs_N, rhs_D) = rhs.unmixedComponents()
         
@@ -186,7 +199,6 @@ extension Fraction {
         
         return Fraction(mixedFormFromSimple(numerator, denominator))
     }
-    
     
     
 }
