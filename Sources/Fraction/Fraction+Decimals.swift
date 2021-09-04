@@ -30,6 +30,55 @@ extension Fraction {
         case sixtyfourths = 0.015625
         case onetwentyeighths = 0.0078125
         case twofiftysixths = 0.00390625
+        
+        var index:Int {
+            switch self {
+            case .whole:
+                return 0
+            case .halves:
+                return 1
+            case .quarters:
+                return 2
+            case .eighths:
+                return 3
+            case .sixteenths:
+                return 4
+            case .thirtyseconds:
+                return 5
+            case .sixtyfourths:
+                return 6
+            case .onetwentyeighths:
+                return 7
+            case .twofiftysixths:
+                return 8
+            }
+        }
+        
+        subscript(index: Int) -> ImperialSnapValue? {
+            switch index {
+            case 0:
+                return .whole
+            case 1:
+                return .halves
+            case 2:
+                return .quarters
+            case 3:
+                return .eighths
+            case 4:
+                return .sixteenths
+            case 5:
+                return .thirtyseconds
+            case 6:
+                return .sixtyfourths
+            case 7:
+                return .onetwentyeighths
+            case 8:
+                return .twofiftysixths
+            default:
+                return nil
+            }
+        }
+
     }
     
     static func splitDecimal(_ submittedValue:Double, discardTiny:Bool = true) -> (whole:Int, fractional:Double) {
@@ -213,25 +262,34 @@ extension Fraction {
     }
     
     //MARK: -- Snaping to Given Denominators
+    
+
 
     //Should find the lowest... kinda very slow
     static func snappedToImperial(_ submittedValue:Double, toNearest granularity:ImperialSnapValue = .sixtyfourths, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
+  
+        let (n1, d1) = biggestImperial(submittedValue, withBinaryPlaceTolerance: granularity.index)
+        let (numerator, denominator) = shiftReducer(n1, d1) //not gcd b/c only valif if denom is power of 2
         
-        var currentlysnapsto:ImperialSnapValue?
-        //does it already snap?
-        for size in ImperialSnapValue.allCases {
-            if submittedValue.truncatingRemainder(dividingBy: size.rawValue)  == 0 {
-                currentlysnapsto = size
-                break
-            }
+        switch numerator {
+        case let n where n < denominator:
+            return (nil, numerator, denominator)
+        case let n where n > denominator:
+            return Self.mixedFormFromSimple(n, denominator)
+        default:
+            return (1, 0, 1)
         }
         
-        if currentlysnapsto != nil && currentlysnapsto!.rawValue > granularity.rawValue {
-            return snapped(submittedValue, divisor: Int(1/currentlysnapsto!.rawValue))
-        }
-        
-        return snapped(submittedValue, divisor: Int(1/granularity.rawValue))
     }
+    
+    //Value between 0 and 1
+    private static func biggestImperial(_ submittedDouble:Double, withBinaryPlaceTolerance T:Int = 8, snapDirection:SnapDirection = .up ) -> (Int, Int){
+        let denominator = pow(2.0, Double(T))
+        let numerator = Int((denominator * submittedDouble).rounded(snapDirection.roundRule))
+        
+        return (numerator, Int(denominator))
+    }
+
     
     static func snapped(_ submittedValue:Double, divisor:Int, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
         let whole = (Int(submittedValue.rounded(.towardZero)))
@@ -240,13 +298,7 @@ extension Fraction {
         let result:Double = (submittedValue - Double(whole)) * Double(divisor)
         var numerator = 0
         
-        switch snapDirection {
-        
-        case .up:
-            numerator = Int(result.rounded(.awayFromZero))
-        case .down:
-            numerator = Int(result.rounded(.towardZero))
-        }
+        numerator = Int(result.rounded(snapDirection.roundRule))
         
         return (whole: whole, numerator: numerator, denominator: denominator)
     }
@@ -254,8 +306,21 @@ extension Fraction {
     enum SnapDirection {
         case up
         case down
+        case nearest
+        
+        var roundRule:FloatingPointRoundingRule {
+            switch self {
+            case .up:
+                return FloatingPointRoundingRule.awayFromZero
+            case .down:
+                return FloatingPointRoundingRule.towardZero
+            case .nearest:
+                return FloatingPointRoundingRule.toNearestOrEven
+            }
+        }
     }
- 
+    
+
     
 //END EXTENTION
 }
