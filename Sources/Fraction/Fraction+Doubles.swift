@@ -150,10 +150,20 @@ extension Fraction {
     
     //MARK: -- Continued fractions
     static func findFastApproximation(of sumittedValue: Double) -> (whole:Int?, numerator:Int, denominator:Int) {
+        var multiplier = 1
         let pair = speedsterApproximation(of: sumittedValue)
-        let result = Self.mixedFormFromSimple(pair.numerator, pair.denominator)
-        let whole = result.whole == 0 ? nil : result.whole
-        return (whole: whole, numerator:result.numerator, denominator: result.denominator)
+        if pair.numerator < 0 {
+            multiplier = -1
+        }
+        let result = Self.mixedFormFromSimple(abs(pair.numerator), pair.denominator)
+        let whole = result.whole == 0 ? nil : result.whole * multiplier
+        
+        //if it's been used set it back to 1
+        if result.whole != 0 {
+            multiplier = 1
+        }
+        
+        return (whole: whole, numerator:result.numerator * multiplier, denominator: result.denominator)
     }
     
     

@@ -28,7 +28,7 @@ extension Fraction:LosslessStringConvertible {
         
         if canidateString[(Range(match.range(withName: "neg"), in: canidateString)!)] == "-" {
             mulitplier = -1
-            print("negative!")
+            //print("negative!")
         }
         
         if let wholeNumberRange = Range(match.range(withName: "whole"), in: canidateString) {

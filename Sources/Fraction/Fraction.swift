@@ -9,13 +9,13 @@ import Foundation
 
 public struct Fraction {
     
-    //----- For testing and setup
-    public var test = true
-    public func testFunc() -> String? {
-        test ? "test function found" : nil
-    }
-    public static var text = "Hello, World!"
-    //-----------------------
+//    //----- For testing and setup
+//    public var test = true
+//    public func testFunc() -> String? {
+//        test ? "test function found" : nil
+//    }
+//    public static var text = "Hello, World!"
+//    //-----------------------
     
     private(set) var whole:Int?
     private(set) var numerator:Int
@@ -61,6 +61,16 @@ public struct Fraction {
     public func reduced() -> Fraction {
         let gcd = Self.gcd(numerator, denominator)
         return Fraction(whole: whole, numerator: numerator/gcd, denominator: denominator/gcd)
+    }
+    
+    public var isNegative:Bool {
+        //TODO: Move to Unit Tests
+        //FLAG ON PLAY both numerator and whole number part neg??!!
+        //This should have been caught in an initialzer
+        if (whole ?? 0) < 0 && numerator < 0 {
+            fatalError()
+        }
+        return (whole ?? 0) < 0 || numerator < 0
     }
     
 }
