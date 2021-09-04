@@ -8,19 +8,34 @@
 import Foundation
 
 
-//MARK: -- Working with Decimals
+//MARK: -- Working with Doubles
 extension Fraction {
     
-    enum DecimalConversionStyle {
-        //Continuous Fraction
-        case fastAndHigh
-        //Farey Number Seeking
-        case closestLowest
-        //Use a value closest to an "Imperial" denominator
-        case snappedToImperial
+    public init(_ submittedDouble:Double, withMaxDenominator maxDenomVal:Int) {
+        let result = Self.findFareyApproximation(of: submittedDouble, withMaxDenominator: maxDenomVal)
+        self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
     }
     
-    enum ImperialSnapValue:Double, CaseIterable {
+    public init(_ submittedDouble:Double, snapToCustomaryUnit divisor:CustomaryUnitValue) {
+        let result = Self.snappedToCustomaryUnit(submittedDouble, toNearest: divisor, snapDirection: .up)
+        self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
+    }
+    
+    public init(_ submittedDouble:Double, snapToDivisor divisor:Int) {
+        let result = Self.snapped(submittedDouble, divisor: divisor, snapDirection: .up)
+        self.init(whole: result.whole, numerator: result.numerator, denominator:result.denominator)
+    }
+    
+//    enum DecimalConversionStyle {
+//        //Continuous Fraction
+//        case fastAndHigh
+//        //Farey Number Seeking
+//        case closestLowest
+//        //Use a value closest to an "Imperial" denominator
+//        case snappedToImperial
+//    }
+    
+    public enum CustomaryUnitValue:Double, CaseIterable {
         case whole = 1.0000000
         case halves = 0.500000
         case quarters = 0.250000
@@ -54,7 +69,7 @@ extension Fraction {
             }
         }
         
-        subscript(index: Int) -> ImperialSnapValue? {
+        subscript(index: Int) -> CustomaryUnitValue? {
             switch index {
             case 0:
                 return .whole
@@ -164,7 +179,7 @@ extension Fraction {
     
     //Uses Farey numbers, potentially could end up with a lower denom than the speedster
     //Mostly clean up to handle numbers not in 0...1
-    static func findFareyApproximation(of submittedDouble:Double, withMaxDenominator maxLimit:Int) -> (Int?, Int, Int) {
+    static func findFareyApproximation(of submittedDouble:Double, withMaxDenominator maxLimit:Int) -> (whole:Int?, numerator:Int, denominator:Int) {
         let neg = submittedDouble < 0
         let split = splitDecimal(submittedDouble)
         
@@ -266,24 +281,20 @@ extension Fraction {
 
 
     //Should find the lowest... kinda very slow
-    static func snappedToImperial(_ submittedValue:Double, toNearest granularity:ImperialSnapValue = .sixtyfourths, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
+    static func snappedToCustomaryUnit(_ submittedValue:Double, toNearest granularity:CustomaryUnitValue = .sixtyfourths, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
   
-        let (n1, d1) = biggestImperial(submittedValue, withBinaryPlaceTolerance: granularity.index)
+        let split = splitDecimal(submittedValue)
+        
+        let (n1, d1) = customaried(split.fractional, withBinaryPlaceTolerance: granularity.index)
         let (numerator, denominator) = shiftReducer(n1, d1) //not gcd b/c only valif if denom is power of 2
         
-        switch numerator {
-        case let n where n < denominator:
-            return (nil, numerator, denominator)
-        case let n where n > denominator:
-            return Self.mixedFormFromSimple(n, denominator)
-        default:
-            return (1, 0, 1)
-        }
+        let whole = split.whole != 0 ? split.whole : nil
         
+        return (whole, numerator, denominator)
     }
     
     //Value between 0 and 1
-    private static func biggestImperial(_ submittedDouble:Double, withBinaryPlaceTolerance T:Int = 8, snapDirection:SnapDirection = .up ) -> (Int, Int){
+    static func customaried(_ submittedDouble:Double, withBinaryPlaceTolerance T:Int = 8, snapDirection:SnapDirection = .up ) -> (Int, Int){
         let denominator = pow(2.0, Double(T))
         let numerator = Int((denominator * submittedDouble).rounded(snapDirection.roundRule))
         
