@@ -151,7 +151,7 @@ extension Fraction {
     //MARK: -- Continued fractions
     static func findFastApproximation(of sumittedValue: Double) -> (whole:Int?, numerator:Int, denominator:Int) {
         var multiplier = 1
-        let pair = speedsterApproximation(of: sumittedValue)
+        let pair = continuedFractionApproximator(of: sumittedValue)
         if pair.numerator < 0 {
             multiplier = -1
         }
@@ -167,7 +167,7 @@ extension Fraction {
     }
     
     
-    static func speedsterApproximation(of sumittedValue: Double) -> (numerator:Int, denominator:Int) {
+    static func continuedFractionApproximator(of sumittedValue: Double) -> (numerator:Int, denominator:Int) {
         var x = sumittedValue.magnitude
         let multiplier = x == sumittedValue ? 1 : -1
         var a = x.rounded(.towardZero)  //this is now
@@ -235,7 +235,7 @@ extension Fraction {
             let mendiantPair = fareyAddition(f1: pair1, f2: pair2)
             let mendiantDouble = Double(mendiantPair.0)/Double(mendiantPair.1)
             
-            //If we lucked into it return, else snuggle the pairs in
+            //If we lucked into a return, else snuggle the pairs in
             switch submittedDouble {
             case mendiantDouble:
                 return mendiantPair
