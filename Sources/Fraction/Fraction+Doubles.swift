@@ -198,6 +198,7 @@ extension Fraction {
     //"Recounting the Rationals" Calkin, Wilf 1999
     // Also
     // https://www.cut-the-knot.org/proofs/fords.shtml#mediant
+    // see also stern-brocot sequence
     
     
     //Using Farey numbers for Max denom b/c likely thats a situation where the person cares about pretty
@@ -261,44 +262,6 @@ extension Fraction {
         return (n, d)
     }
 
-    private static func fareyShift(pair:(Int, Int)) -> (Int, Int) {
-        let x = pair.0 + pair.1
-        let y = pair.1
-        return (x,y)
-    }
-
-    //stern-brocot sequence?
-    private static func fareySequence(iterations:Int) {
-        var pair = (0,1)
-        var sequence:[Int] = []
-        for i in 0...iterations {
-            let newPair = fareyShift(pair: pair)
-            sequence.append(newPair.0)
-            sequence.append(newPair.1)
-            pair = (sequence[i], sequence[i+1])
-        }
-        print(sequence)
-    }
-
-    //Not very useful...
-    private static func fareySequence(maxValue:Int) {
-        //let iterations = 100000
-        var i = 0
-        var pair = (0,1)
-        var sequence:[Int] = []
-        while !sequence.contains(maxValue+1) {
-            let newPair = fareyShift(pair: pair)
-            if newPair.1 == (maxValue+1) || newPair.0 == maxValue+1 {
-                break
-            }
-            sequence.append(newPair.0)
-            sequence.append(newPair.1)
-            pair = (sequence[i], sequence[i+1])
-            //print(pair)
-            i = i + 1
-        }
-        print(sequence)
-    }
     
     //MARK: -- Snaping to Given Denominators
     
