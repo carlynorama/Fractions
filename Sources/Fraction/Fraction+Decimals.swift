@@ -292,15 +292,16 @@ extension Fraction {
 
     
     static func snapped(_ submittedValue:Double, divisor:Int, snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
-        let whole = (Int(submittedValue.rounded(.towardZero)))
+        
+        let split = splitDecimal(submittedValue)
         let denominator = divisor
         
-        let result:Double = (submittedValue - Double(whole)) * Double(divisor)
+        let result:Double = split.fractional * Double(divisor)
         var numerator = 0
         
         numerator = Int(result.rounded(snapDirection.roundRule))
         
-        return (whole: whole, numerator: numerator, denominator: denominator)
+        return (whole: split.whole, numerator: numerator, denominator: denominator)
     }
     
     enum SnapDirection {
