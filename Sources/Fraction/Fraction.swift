@@ -69,13 +69,13 @@ public struct Fraction {
 extension Fraction {
     //Also see the Lossless String Encodable
  
-    public init?(_ double:Double, maxDenominator:Int = 100) {
-        if let result = Self.calcFraction(double, maxDenominator: maxDenominator) {
-            self.init(whole: result.whole, numerator: result.numerator, denominator:result.denominator)
-        } else {
-            return nil
-        }
-    }
+//    public init?(_ double:Double, maxDenominator:Int = 100) {
+//        if let result = Self.calcFraction(double, maxDenominator: maxDenominator) {
+//            self.init(whole: result.whole, numerator: result.numerator, denominator:result.denominator)
+//        } else {
+//            return nil
+//        }
+//    }
     
     public init(_ double:Double, snapToDivisor divisor:Int) {
         let result = Self.snapped(double, divisor: divisor)
@@ -128,7 +128,7 @@ extension Fraction {
         }
     }
     
-    private func shiftReducer(_ m:Int, _ n:Int) -> (Int, Int) {
+    static func shiftReducer(_ m:Int, _ n:Int) -> (Int, Int) {
         if m == n {
             return (1, 1)
         }
@@ -139,5 +139,55 @@ extension Fraction {
         
         return (m,n)
     }
+    
+    static func mixedFormFromSimple(_ n:Int, _ d:Int) -> (Int, Int, Int) {
+        let (quotient, remainder) = n.quotientAndRemainder(dividingBy: d)
+        return (quotient, remainder, d)
+    }
+    
+    static func +(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+        let (lhs_N, lhs_D) = lhs.unmixedComponents()
+        let (rhs_N, rhs_D) = rhs.unmixedComponents()
+        
+        let crossDenominator = lhs_D * rhs_D
+        let cross_lDrN = lhs_D * rhs_N
+        let cross_rDlN = lhs_N * rhs_D
+        
+        return Fraction(mixedFormFromSimple((cross_lDrN + cross_rDlN), crossDenominator))
+    }
+    
+    static func -(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+        let (lhs_N, lhs_D) = lhs.unmixedComponents()
+        let (rhs_N, rhs_D) = rhs.unmixedComponents()
+        
+        let crossDenominator = lhs_D * rhs_D
+        let cross_lDrN = lhs_D * rhs_N * -1
+        let cross_rDlN = lhs_N * rhs_D
+        
+        return Fraction(mixedFormFromSimple((cross_lDrN + cross_rDlN), crossDenominator))
+    }
+    
+    static func *(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+        let (lhs_N, lhs_D) = lhs.unmixedComponents()
+        let (rhs_N, rhs_D) = rhs.unmixedComponents()
+        
+        let numerator = lhs_N * rhs_N
+        let denominator = lhs_D * rhs_D
+        
+        return Fraction(mixedFormFromSimple(numerator, denominator))
+    }
+    
+    static func /(_ lhs:Fraction, _ rhs:Fraction) -> Fraction {
+        let (lhs_N, lhs_D) = lhs.unmixedComponents()
+        let (rhs_N, rhs_D) = rhs.unmixedComponents()
+        
+        let numerator = lhs_N * rhs_D
+        let denominator = lhs_D * rhs_N
+        
+        return Fraction(mixedFormFromSimple(numerator, denominator))
+    }
+    
+    
+    
 }
 
