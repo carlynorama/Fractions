@@ -269,15 +269,24 @@ extension Fraction {
 
     //Should find the lowest... kinda very slow
     static func findClosest(_ granularity:CustomaryUnitValue = .sixtyfourths, to submittedValue:Double, rounding snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
+        
+        let absValue = submittedValue.magnitude
+        var multiplier = absValue == submittedValue ? 1 : -1
   
-        let split = splitDecimal(submittedValue)
+        let split = splitDecimal(absValue)
         
         let (n1, d1) = customaried(split.fractional, withBinaryPlaceTolerance: granularity.index)
         let (numerator, denominator) = shiftReducer(n1, d1) //not gcd b/c only valif if denom is power of 2
         
-        let whole = split.whole != 0 ? split.whole : nil
+        let whole = split.whole == 0 ? nil : split.whole * multiplier
         
-        return (whole, numerator, denominator)
+        //if it's been used set it back to 1
+        if split.whole != 0 {
+            multiplier = 1
+        }
+        
+        return (whole: whole, numerator:numerator * multiplier, denominator: denominator)
+
     }
     
     //Value between 0 and 1
@@ -291,7 +300,10 @@ extension Fraction {
     
     static func findClosestTo(_ submittedValue:Double, withDivisor divisor:Int, rounding snapDirection:SnapDirection = .up) -> (whole:Int?, numerator:Int, denominator:Int) {
         
-        let split = splitDecimal(submittedValue)
+        let absValue = submittedValue.magnitude
+        var multiplier = absValue == submittedValue ? 1 : -1
+  
+        let split = splitDecimal(absValue)
         let denominator = divisor
         
         let result:Double = split.fractional * Double(divisor)
@@ -299,7 +311,14 @@ extension Fraction {
         
         numerator = Int(result.rounded(snapDirection.roundRule))
         
-        return (whole: split.whole, numerator: numerator, denominator: denominator)
+        let whole = split.whole == 0 ? nil : split.whole * multiplier
+        
+        //if it's been used set it back to 1
+        if split.whole != 0 {
+            multiplier = 1
+        }
+        
+        return (whole: whole, numerator:numerator * multiplier, denominator: denominator)
     }
     
     enum SnapDirection {
