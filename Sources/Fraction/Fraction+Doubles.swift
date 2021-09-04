@@ -22,7 +22,7 @@ extension Fraction {
     }
     
     public init(_ submittedDouble:Double, snapToCustomaryUnit divisor:CustomaryUnitValue) {
-        let result = Self.findClosest(.sixteenths, to: submittedDouble, rounding: .up)
+        let result = Self.findClosest(divisor, to: submittedDouble, rounding: .up)
         self.init(whole: result.whole, numerator: result.numerator, denominator: result.denominator)
     }
     
