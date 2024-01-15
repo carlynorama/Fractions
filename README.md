@@ -28,7 +28,7 @@ This package was written to back an app that collects and manipulates data being
 - https://en.wikipedia.org/wiki/Continued_fraction#Semiconvergents 
 - https://en.wikipedia.org/wiki/Simple_rational_approximation
 - https://github.com/alidasdan/best-rational-approximation <— Best link
-- - https://docs.python.org/3.1/library/fractions.html#fractions.Fraction.limit_denominator
+- https://docs.python.org/3.1/library/fractions.html#fractions.Fraction.limit_denominator
 - https://www.ams.org/publicoutreach/feature-column/fcarc-stern-brocot
 - https://www.ams.org/publicoutreach/feature-column/fcarc-stern-brocot
 - https://www.jstor.org/stable/2004622
@@ -38,6 +38,7 @@ This package was written to back an app that collects and manipulates data being
 - Sieve Methods: https://www.youtube.com/watch?v=peWcw8rCE3A
 - https://stackoverflow.com/questions/5124743/algorithm-for-simplifying-decimal-to-fractions
 - https://laptrinhx.com/floating-point-swift-ulp-and-epsilon-3629378059/
+- https://github.com/xwu/NumericAnnex/blob/master/Sources/Rational.swift
 
 ### Text Input RegEx Dump 
 - https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift 
