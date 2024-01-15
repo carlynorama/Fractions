@@ -14,10 +14,10 @@ let package = Package(
         .library(
             name: "Fraction",
             targets: ["Fraction"]),
-        .executable(
-            name: "FractionCLI",
-            targets: ["FractionCLI"]
-        )
+        //.executable(
+        //    name: "FractionCLI",
+        //    targets: ["FractionCLI"]
+        //)
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -29,9 +29,9 @@ let package = Package(
         .target(
             name: "Fraction",
             dependencies: []),
-        .target(
-            name: "FractionCLI",
-            dependencies: ["Fraction"]),
+//        .target(
+//            name: "FractionCLI",
+//            dependencies: ["Fraction"]),
         .testTarget(
             name: "FractionTests",
             dependencies: ["Fraction"]),
