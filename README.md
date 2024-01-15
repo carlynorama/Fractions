@@ -1,5 +1,6 @@
 # Fraction
 
-A description of this package is that while it might be fun to poke around their are tons of more complete rational number packages out there.  This is not the one you're looking for. Promise. 
+This package was written to back an app that collects and manipulates data being collected in inches. You are welcome to use it, steal from it, do what every you want but it is not up to standards in terms of documentation for general use. 
+
 
 
