@@ -28,7 +28,7 @@ This package was written to back an app that collects and manipulates data being
 - https://en.wikipedia.org/wiki/Continued_fraction#Semiconvergents 
 - https://en.wikipedia.org/wiki/Simple_rational_approximation
 - https://github.com/alidasdan/best-rational-approximation <— Best link
-- - https://docs.python.org/3.1/library/fractions.html#fractions.Fraction.limit_denominator
+- https://docs.python.org/3.1/library/fractions.html#fractions.Fraction.limit_denominator
 - https://www.ams.org/publicoutreach/feature-column/fcarc-stern-brocot
 - https://www.ams.org/publicoutreach/feature-column/fcarc-stern-brocot
 - https://www.jstor.org/stable/2004622
