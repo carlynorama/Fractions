@@ -149,9 +149,9 @@ extension Fraction {
     //MARK: - Approaches to estimating fractions
     
     //MARK: -- Continued fractions
-    static func findFastApproximation(of sumittedValue: Double) -> (whole:Int?, numerator:Int, denominator:Int) {
+    static func findFastApproximation(of submittedValue: Double) -> (whole:Int?, numerator:Int, denominator:Int) {
         var multiplier = 1
-        let pair = continuedFractionApproximator(of: sumittedValue)
+        let pair = continuedFractionApproximator(of: submittedValue)
         if pair.numerator < 0 {
             multiplier = -1
         }
@@ -167,17 +167,17 @@ extension Fraction {
     }
     
     
-    static func continuedFractionApproximator(of sumittedValue: Double) -> (numerator:Int, denominator:Int) {
-        var x = sumittedValue.magnitude
-        let multiplier = x == sumittedValue ? 1 : -1
+    static func continuedFractionApproximator(of submittedValue: Double) -> (numerator:Int, denominator:Int) {
+        var x = submittedValue.magnitude
+        let multiplier = x == submittedValue ? 1 : -1
         var a = x.rounded(.towardZero)  //this is now
         var (h1, k1, h, k) = (1, 0, Int(a), 1)
         
         //k is an int so it doesn't have .ulp, so we have to find it
         // i.e. Double.ulpOfOne * pow(2.0, Double(value.exponent))
-        //this while statement is saying that the current remainer of
+        //this while statement is saying that the current remainder of
         //the fraction you're using has to be bigger that the next
-        //reprentable number - i.e. that differnce should be meaningful
+        //representable number - i.e. that difference should be meaningful
         //not just the difference of how doubles are handled.
         while x - a > Double.ulpOfOne * pow(2, Double(Double(k).exponent)) {
             x = 1.0/(x - a)
@@ -212,7 +212,7 @@ extension Fraction {
             return (split.whole, 0, 1)
         }
         
-        var (numerator, denominator) = fareyAprroximator(of: split.fractional.magnitude, withMaxDenominator: maxLimit)
+        var (numerator, denominator) = fareyApproximator(of: split.fractional.magnitude, withMaxDenominator: maxLimit)
 
         
         let whole = split.whole == 0 ? nil : split.whole
@@ -228,22 +228,22 @@ extension Fraction {
     //only takes positive numbers between 0 and 1
     //if it is given a bigger number, the searching algo
     //has a stride of the whole number (rounded up)
-    static private func fareyAprroximator(of submittedDouble:Double, withMaxDenominator maxLimit:Int) -> (Int, Int){
+    static private func fareyApproximator(of submittedDouble:Double, withMaxDenominator maxLimit:Int) -> (Int, Int){
         var pair1 = (0,1)
         var pair2 = (1, 1)
         
         while pair1.1 <= maxLimit && pair2.1 <= maxLimit {
-            let mendiantPair = fareyAddition(f1: pair1, f2: pair2)
-            let mendiantDouble = Double(mendiantPair.0)/Double(mendiantPair.1)
+            let mediantPair = fareyAddition(f1: pair1, f2: pair2)
+            let mediantDouble = Double(mediantPair.0)/Double(mediantPair.1)
             
             //If we lucked into a return, else snuggle the pairs in
             switch submittedDouble {
-            case mendiantDouble:
-                return mendiantPair
-            case let x where x < mendiantDouble:
-                pair2 = mendiantPair
+            case mediantDouble:
+                return mediantPair
+            case let x where x < mediantDouble:
+                pair2 = mediantPair
             default:
-                pair1 = mendiantPair
+                pair1 = mediantPair
             }
             
             //print("pair1:\(pair1), pair2:\(pair2)")
@@ -255,7 +255,7 @@ extension Fraction {
         return lowerDenomPair
     }
 
-    //Also mendiants and fresman sums
+    //Also mediants and fresman sums
     private static func fareyAddition(f1:(Int, Int), f2:(Int, Int)) -> (Int, Int){
         let n = f1.0 + f2.0
         let d = f1.1 + f2.1
@@ -263,7 +263,7 @@ extension Fraction {
     }
 
     
-    //MARK: -- Snaping to Given Denominators
+    //MARK: -- Snapping to Given Denominators
     
 
 
@@ -276,7 +276,7 @@ extension Fraction {
         let split = splitDecimal(absValue)
         
         let (n1, d1) = customaried(split.fractional, withBinaryPlaceTolerance: granularity.index)
-        let (numerator, denominator) = shiftReducer(n1, d1) //not gcd b/c only valif if denom is power of 2
+        let (numerator, denominator) = shiftReducer(n1, d1) //not gcd b/c only valid if denom is power of 2
         
         let whole = split.whole == 0 ? nil : split.whole * multiplier
         
@@ -340,5 +340,5 @@ extension Fraction {
     
 
     
-//END EXTENTION
+//END EXTENSION
 }

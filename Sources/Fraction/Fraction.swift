@@ -2,7 +2,7 @@
 //  Fractions.swift
 //  PotterNotes
 //
-//  Created by Labtanza on 8/15/21.
+//  Created by Carlyn Maw on 8/15/21.
 //
 
 import Foundation
