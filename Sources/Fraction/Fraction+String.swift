@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Fraction+String.swift
 //  
 //
 //  Created by Carlyn Maw on 8/27/21.
