@@ -66,7 +66,7 @@ public struct Fraction {
     public var isNegative:Bool {
         //TODO: Move to Unit Tests
         //FLAG ON PLAY both numerator and whole number part neg??!!
-        //This should have been caught in an initialzer
+        //This should have been caught in an initializer
         if (whole ?? 0) < 0 && numerator < 0 {
             fatalError()
         }
@@ -75,7 +75,7 @@ public struct Fraction {
     
 }
 
-//MARK: - Int based convenience itializers
+//MARK: - Int based convenience initializers
 extension Fraction {
 
     public init(_ tuple:(Int, Int, Int)) {
@@ -192,6 +192,33 @@ extension Fraction:Comparable, Equatable {
         
         return (m,n)
     }
+
+
+    //misc other implementations 
+    //See Reindeer Math from Advent of Code 2023
+    // static func gcd_euclid(_ m:Int, _ n:Int) -> Int {
+    //     let r = m % n
+    //     if r != 0 {
+    //     return gcd_euclid(n, r)
+    //     } else {
+    //     return n
+    //     }
+    // }
+
+    // static func gcd_euclid_while(_ m: Int, _ n: Int) -> Int {
+    //     var a = 0
+    //     var b = max(m, n)
+    //     var r = min(m, n)
+
+    //     while r != 0 {
+    //     a = b
+    //     b = r
+    //     r = a % b
+    //     }
+    //     return b
+    // }
+
+
     
     static func mixedFormFromSimple(_ n:Int, _ d:Int) -> (whole:Int, numerator:Int, denominator:Int) {
         let (quotient, remainder) = n.quotientAndRemainder(dividingBy: d)
