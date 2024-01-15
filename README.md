@@ -2,7 +2,13 @@
 
 This package was written to back an app that collects and manipulates data being collected in inches. You are welcome to use it, steal from it, do what every you want but it is not up to standards in terms of documentation for general use. 
 
+Others to Try:
 
+- https://github.com/xwu/NumericAnnex/blob/master/Sources/Rational.swift
+- https://github.com/objecthub/swift-numberkit/blob/master/Sources/NumberKit/Rational.swift
+- https://github.com/dankogai/swift-bignum/blob/main/Sources/BigNum/Rational.swift
+- https://github.com/abdel-17/swift-rational
+- related: https://swiftpackageindex.com/davidwkeith/FractionFormatter
 
 ## References
 
@@ -38,7 +44,7 @@ This package was written to back an app that collects and manipulates data being
 - Sieve Methods: https://www.youtube.com/watch?v=peWcw8rCE3A
 - https://stackoverflow.com/questions/5124743/algorithm-for-simplifying-decimal-to-fractions
 - https://laptrinhx.com/floating-point-swift-ulp-and-epsilon-3629378059/
-- https://github.com/xwu/NumericAnnex/blob/master/Sources/Rational.swift
+
 
 ### Text Input RegEx Dump 
 - https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift 
