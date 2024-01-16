@@ -45,6 +45,8 @@ Others to Try:
 - https://stackoverflow.com/questions/5124743/algorithm-for-simplifying-decimal-to-fractions
 - https://laptrinhx.com/floating-point-swift-ulp-and-epsilon-3629378059/
 
+### Overflow
+- Overflow: https://forums.swift.org/t/how-to-avoid-spurious-overflow-in-rational-number-addition/64888
 
 ### Text Input RegEx Dump 
 - https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift 
