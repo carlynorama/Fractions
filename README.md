@@ -1,6 +1,6 @@
 # Fraction
 
-This package was written to back an app that collects and manipulates data being collected in inches. You are welcome to use it, steal from it, do what every you want but it is not up to standards in terms of documentation for general use. 
+This package was written to back an app that collects and manipulates data being collected in inches. You are welcome to use it, steal from it, do what every you want but I stopped working on it too much once it worked for what I needed. It is not up to standards in terms of documentation, optimization, allowing generics, handling overflow, etc. 
 
 Others to Try:
 
